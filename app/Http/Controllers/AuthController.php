@@ -20,7 +20,7 @@ class AuthController extends Controller
         $validator = Validator::make(request()->all(), [
             'firstName' => 'required',
             'lastName' => 'required',
-            'phone' => 'required|unique:users',
+            'phone' => 'required|max:13|starts_with:+,963|unique:users',
             'password' => 'required|confirmed|min:8',
 
         ]);
@@ -28,14 +28,14 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
+        if (request())
 
-        $user = new User;
+            $user = new User;
         $user->firstName = request()->firstName;
         $user->lastName = request()->lastName;
         $user->phone = request()->phone;
         $user->password = bcrypt(request()->password);
         $user->save();
-
         return response()->json($user, 201);
     }
 
